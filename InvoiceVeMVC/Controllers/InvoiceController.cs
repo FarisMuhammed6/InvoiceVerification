@@ -2,6 +2,7 @@
 using InvoiceVeMVC.Models;
 using InvoiceVeMVC.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.RegularExpressions;
 
 namespace InvoiceVeMVC.Controllers
@@ -16,12 +17,19 @@ namespace InvoiceVeMVC.Controllers
             _ocrService = ocrService;
             _dbcontext = dbcontext;
         }
-
         public IActionResult Index()
         {
+            var contracts = _dbcontext.Contracts.ToList();
+            ViewBag.Contracts = new SelectList(contracts, "ContractName", "ContractName");
             return View();
         }
 
+        [HttpGet]
+        public IActionResult GetAllContracts()
+        {
+            var contracts = _dbcontext.Contracts.ToList();
+            return Json(contracts);
+        }
         [HttpPost]
         public async Task<IActionResult> UploadAndVerifyInvoice(IFormFile file, string contractName)
         {

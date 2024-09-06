@@ -31,9 +31,30 @@
         <form id="invoiceUploadForm" enctype="multipart/form-data" class="needs-validation" novalidate method="post" action="/Invoice/UploadAndVerifyInvoice">
             <div class="mb-3">
                 <label for="contractName" class="form-label">Contract Name</label>
-                <input type="text" class="form-control" id="contractName" name="contractName" required>
+                <select class="form-select" id="contractName" name="contractName" required>
+                    <option value="">Select a contract</option>
+                    @if (ViewBag.Contracts != null)
+                    {
+                        var contracts = ViewBag.Contracts as SelectList;
+                        if (contracts != null)
+                        {
+                            foreach (var contract in contracts)
+                            {
+                                <option value="@contract.Value">@contract.Text</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="" disabled>No contracts available</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="" disabled>No contracts available</option>
+                    }
+                </select>
                 <div class="invalid-feedback">
-                    Please enter a contract name.
+                    Please select a contract.
                 </div>
             </div>
             <div class="mb-3">
